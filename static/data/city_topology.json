@@ -1,0 +1,690 @@
+{
+  "nodes": [
+    {
+      "id": "D_MITHI_OUTFALL",
+      "name": "Mithi Estuary Tidal Outfall & Gates",
+      "layer": "drainage",
+      "lat": 19.0535,
+      "lng": 72.842,
+      "elevation_m": 2.1,
+      "base_capacity": 100.0,
+      "criticality": 0.95,
+      "population_impact": 450000,
+      "backup_systems": "Manual Hydraulic Winch",
+      "description": "Primary sea outfall with floodgates; vulnerable to high-tide backflow during storm surge.",
+      "metadata": {
+        "max_discharge_cumec": 320,
+        "silt_level_pct": 28
+      }
+    },
+    {
+      "id": "D_BKC_PUMP",
+      "name": "BKC Stormwater Heavy Pumping Station",
+      "layer": "drainage",
+      "lat": 19.063,
+      "lng": 72.864,
+      "elevation_m": 3.2,
+      "base_capacity": 100.0,
+      "criticality": 0.92,
+      "population_impact": 320000,
+      "backup_systems": "Diesel Genset (2 hours reserve)",
+      "description": "5x High-capacity submersible pumps lifting stormwater from commercial financial district.",
+      "metadata": {
+        "pump_count": 5,
+        "rated_power_mw": 3.8
+      }
+    },
+    {
+      "id": "D_KALINA_DRAIN",
+      "name": "Kalina Box Drain & Retention Basin",
+      "layer": "drainage",
+      "lat": 19.074,
+      "lng": 72.857,
+      "elevation_m": 4.0,
+      "base_capacity": 100.0,
+      "criticality": 0.78,
+      "population_impact": 180000,
+      "backup_systems": "None",
+      "description": "Major concrete stormwater channel carrying runoff from airport slopes into Mithi river.",
+      "metadata": {
+        "basin_volume_m3": 85000,
+        "silt_level_pct": 42
+      }
+    },
+    {
+      "id": "D_DHARAVI_CHANNEL",
+      "name": "Dharavi Trunk Stormwater Canal",
+      "layer": "drainage",
+      "lat": 19.045,
+      "lng": 72.852,
+      "elevation_m": 2.5,
+      "base_capacity": 100.0,
+      "criticality": 0.85,
+      "population_impact": 390000,
+      "backup_systems": "Emergency Sump",
+      "description": "High-density urban canal draining informal settlements and peripheral industrial clusters.",
+      "metadata": {
+        "channel_width_m": 14,
+        "silt_level_pct": 55
+      }
+    },
+    {
+      "id": "D_CHAMBUR_BASIN",
+      "name": "Chunabhatti Low-Lying Sump & Canal",
+      "layer": "drainage",
+      "lat": 19.056,
+      "lng": 72.875,
+      "elevation_m": 2.2,
+      "base_capacity": 100.0,
+      "criticality": 0.75,
+      "population_impact": 160000,
+      "backup_systems": "None",
+      "description": "Depression basin collecting runoff before funneling towards Mahil Bay.",
+      "metadata": {
+        "silt_level_pct": 35
+      }
+    },
+    {
+      "id": "D_VAKOLA_NULLAH",
+      "name": "Vakola Tributary Confluence",
+      "layer": "drainage",
+      "lat": 19.078,
+      "lng": 72.848,
+      "elevation_m": 4.8,
+      "base_capacity": 100.0,
+      "criticality": 0.79,
+      "population_impact": 195000,
+      "backup_systems": "None",
+      "description": "Key upstream feeder nullah entering the main Mithi basin; prone to trash blockages.",
+      "metadata": {
+        "debris_clog_pct": 38
+      }
+    },
+    {
+      "id": "E_BKC_SUBSTATION",
+      "name": "220kV BKC Transmission Substation",
+      "layer": "power",
+      "lat": 19.061,
+      "lng": 72.868,
+      "elevation_m": 3.5,
+      "base_capacity": 100.0,
+      "criticality": 0.98,
+      "population_impact": 520000,
+      "backup_systems": "Dual Ring Feeders + Central Battery Bank",
+      "description": "Central receiving substation feeding financial business hub, pumping stations, and hospitals.",
+      "metadata": {
+        "voltage_kv": 220,
+        "transformer_units": 4,
+        "submerged_breaker_risk": "High"
+      }
+    },
+    {
+      "id": "E_DHARAVI_FEEDER",
+      "name": "110kV Dharavi Switching Substation",
+      "layer": "power",
+      "lat": 19.043,
+      "lng": 72.856,
+      "elevation_m": 2.8,
+      "base_capacity": 100.0,
+      "criticality": 0.88,
+      "population_impact": 310000,
+      "backup_systems": "Auxiliary DC Bank",
+      "description": "Powers south-central residential grids, sewage lifts, and street lighting networks.",
+      "metadata": {
+        "voltage_kv": 110,
+        "transformer_units": 3
+      }
+    },
+    {
+      "id": "E_KALINA_GRID",
+      "name": "33kV Kalina Distribution Substation",
+      "layer": "power",
+      "lat": 19.071,
+      "lng": 72.861,
+      "elevation_m": 3.1,
+      "base_capacity": 100.0,
+      "criticality": 0.84,
+      "population_impact": 175000,
+      "backup_systems": "Manual Bus-Tie Switch",
+      "description": "Medium-voltage station supplying university campus, arterial traffic signals, and residential areas.",
+      "metadata": {
+        "voltage_kv": 33,
+        "transformer_units": 2
+      }
+    },
+    {
+      "id": "E_BANDRA_STEPDOWN",
+      "name": "33kV Bandra East Step-Down Yard",
+      "layer": "power",
+      "lat": 19.058,
+      "lng": 72.845,
+      "elevation_m": 4.2,
+      "base_capacity": 100.0,
+      "criticality": 0.86,
+      "population_impact": 230000,
+      "backup_systems": "Auto-reclose circuit breaker",
+      "description": "Powers railway traction lines, Kalanagar intersection traffic systems, and emergency depots.",
+      "metadata": {
+        "voltage_kv": 33,
+        "transformer_units": 3
+      }
+    },
+    {
+      "id": "E_KURLA_FEEDER",
+      "name": "33kV Kurla West Industrial Feeder",
+      "layer": "power",
+      "lat": 19.067,
+      "lng": 72.879,
+      "elevation_m": 2.9,
+      "base_capacity": 100.0,
+      "criticality": 0.76,
+      "population_impact": 140000,
+      "backup_systems": "None",
+      "description": "Supplies eastern manufacturing sheds, local water sumps, and railway sidings.",
+      "metadata": {
+        "voltage_kv": 33,
+        "transformer_units": 2
+      }
+    },
+    {
+      "id": "R_WEH_JUNCTION",
+      "name": "Western Express Highway (Kalanagar Junction)",
+      "layer": "transport",
+      "lat": 19.0595,
+      "lng": 72.8445,
+      "elevation_m": 3.8,
+      "base_capacity": 100.0,
+      "criticality": 0.96,
+      "population_impact": 680000,
+      "backup_systems": "Variable Messaging Signs (VMS)",
+      "description": "Lifeline 8-lane arterial junction connecting South Mumbai to Northern suburbs and Airport.",
+      "metadata": {
+        "daily_vehicles": 185000,
+        "lanes": 8,
+        "flood_clearance_cm": 25
+      }
+    },
+    {
+      "id": "R_BKC_CONNECTOR",
+      "name": "BKC Connector Flyover & Boulevard",
+      "layer": "transport",
+      "lat": 19.057,
+      "lng": 72.862,
+      "elevation_m": 4.5,
+      "base_capacity": 100.0,
+      "criticality": 0.9,
+      "population_impact": 290000,
+      "backup_systems": "Toll Gate Bypass",
+      "description": "Direct link funneling traffic from Eastern Express Highway directly into BKC and Hospitals.",
+      "metadata": {
+        "daily_vehicles": 95000,
+        "lanes": 4
+      }
+    },
+    {
+      "id": "R_SCLR_INTERCHANGE",
+      "name": "Santa Cruz-Chembur Link Road (SCLR) Interchange",
+      "layer": "transport",
+      "lat": 19.072,
+      "lng": 72.869,
+      "elevation_m": 4.8,
+      "base_capacity": 100.0,
+      "criticality": 0.88,
+      "population_impact": 340000,
+      "backup_systems": "CCTV Incident Tracking",
+      "description": "Double-decker flyover crossing Central Railway tracks; key east-west transit artery.",
+      "metadata": {
+        "daily_vehicles": 120000,
+        "lanes": 6
+      }
+    },
+    {
+      "id": "R_LBS_MARG",
+      "name": "LBS Marg Critical Underpass",
+      "layer": "transport",
+      "lat": 19.065,
+      "lng": 72.881,
+      "elevation_m": 2.3,
+      "base_capacity": 100.0,
+      "criticality": 0.85,
+      "population_impact": 260000,
+      "backup_systems": "Submersible Drainage Pump (0.5 cumec)",
+      "description": "Chronically submerged underpass linking Kurla to Ghatkopar; prone to rapid flooding.",
+      "metadata": {
+        "daily_vehicles": 80000,
+        "lanes": 4,
+        "flood_clearance_cm": 15
+      }
+    },
+    {
+      "id": "R_MITHI_BRIDGE",
+      "name": "Mithi Causeway Bridge",
+      "layer": "transport",
+      "lat": 19.056,
+      "lng": 72.85,
+      "elevation_m": 3.0,
+      "base_capacity": 100.0,
+      "criticality": 0.91,
+      "population_impact": 410000,
+      "backup_systems": "Bridge Structural Stress Sensors",
+      "description": "Primary surface bridge crossing the Mithi estuary connecting Bandra East to Dharavi.",
+      "metadata": {
+        "daily_vehicles": 110000,
+        "lanes": 6
+      }
+    },
+    {
+      "id": "R_CST_ROAD",
+      "name": "CST Road Hospital Corridor",
+      "layer": "transport",
+      "lat": 19.069,
+      "lng": 72.862,
+      "elevation_m": 4.1,
+      "base_capacity": 100.0,
+      "criticality": 0.93,
+      "population_impact": 210000,
+      "backup_systems": "Dedicated Emergency Bus Lane",
+      "description": "Four-lane access road connecting major multi-speciality tertiary hospitals and cardiac centers.",
+      "metadata": {
+        "daily_vehicles": 65000,
+        "lanes": 4
+      }
+    },
+    {
+      "id": "R_KALINA_MILITARY_RD",
+      "name": "Kalina University Link Arterial",
+      "layer": "transport",
+      "lat": 19.076,
+      "lng": 72.853,
+      "elevation_m": 5.0,
+      "base_capacity": 100.0,
+      "criticality": 0.73,
+      "population_impact": 110000,
+      "backup_systems": "None",
+      "description": "Alternative bypass road running north of the Mithi basin toward domestic airport terminal.",
+      "metadata": {
+        "daily_vehicles": 45000,
+        "lanes": 2
+      }
+    },
+    {
+      "id": "H_ASIAN_HEART",
+      "name": "Asian Heart Institute (Super-Speciality Trauma)",
+      "layer": "emergency",
+      "lat": 19.0645,
+      "lng": 72.867,
+      "elevation_m": 4.2,
+      "base_capacity": 100.0,
+      "criticality": 0.99,
+      "population_impact": 85000,
+      "backup_systems": "On-site Diesel Genset (12h fuel) + 2x ICU Battery Banks",
+      "description": "Premier 250-bed cardiac and trauma center; requires uninterrupted power and ambulance road clearance.",
+      "metadata": {
+        "bed_capacity": 250,
+        "icu_beds": 65,
+        "daily_emergency_cases": 80
+      }
+    },
+    {
+      "id": "H_LILAVATI",
+      "name": "Lilavati Hospital & Research Centre",
+      "layer": "emergency",
+      "lat": 19.051,
+      "lng": 72.831,
+      "elevation_m": 6.5,
+      "base_capacity": 100.0,
+      "criticality": 0.97,
+      "population_impact": 120000,
+      "backup_systems": "Triple Redundant Gensets (24h)",
+      "description": "Major 320-bed tertiary hospital serving western coastline and suburban influx.",
+      "metadata": {
+        "bed_capacity": 320,
+        "icu_beds": 80,
+        "daily_emergency_cases": 110
+      }
+    },
+    {
+      "id": "H_VN_DESAI",
+      "name": "VN Desai Municipal Hospital",
+      "layer": "emergency",
+      "lat": 19.0805,
+      "lng": 72.844,
+      "elevation_m": 5.5,
+      "base_capacity": 100.0,
+      "criticality": 0.91,
+      "population_impact": 290000,
+      "backup_systems": "Municipal Diesel Genset (6h)",
+      "description": "Civic public hospital catering to large underserved and slum populations in Santa Cruz.",
+      "metadata": {
+        "bed_capacity": 280,
+        "icu_beds": 35,
+        "daily_emergency_cases": 160
+      }
+    },
+    {
+      "id": "EM_BKC_FIRE",
+      "name": "BKC Central Disaster Response & Fire Brigade",
+      "layer": "emergency",
+      "lat": 19.062,
+      "lng": 72.86,
+      "elevation_m": 4.0,
+      "base_capacity": 100.0,
+      "criticality": 0.94,
+      "population_impact": 450000,
+      "backup_systems": "Satellite Comms + Dedicated Fleet Fuel Depot",
+      "description": "Emergency headquarters housing specialized water-rescue Zodiac boats, hydraulic cutters, and heavy pumps.",
+      "metadata": {
+        "fire_tenders": 8,
+        "rescue_boats": 4,
+        "active_personnel": 48
+      }
+    },
+    {
+      "id": "EM_AMBULANCE_HUB",
+      "name": "Suburban 108 Emergency Ambulance Hub",
+      "layer": "emergency",
+      "lat": 19.06,
+      "lng": 72.853,
+      "elevation_m": 3.6,
+      "base_capacity": 100.0,
+      "criticality": 0.96,
+      "population_impact": 500000,
+      "backup_systems": "TETRA Radio Dispatch + Dual Genset",
+      "description": "Central dispatch hub for 24 Advanced Life Support (ALS) ambulances serving South/Central Mumbai.",
+      "metadata": {
+        "active_ambulances": 24,
+        "avg_response_target_min": 12
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "D_VAKOLA_NULLAH",
+      "target": "D_KALINA_DRAIN",
+      "relation": "flow_downstream",
+      "weight": 0.85,
+      "latency_min": 10,
+      "description": "Storm runoff enters Kalina basin"
+    },
+    {
+      "source": "D_KALINA_DRAIN",
+      "target": "D_BKC_PUMP",
+      "relation": "flow_downstream",
+      "weight": 0.9,
+      "latency_min": 15,
+      "description": "Basin spillover channels towards BKC pump sump"
+    },
+    {
+      "source": "D_BKC_PUMP",
+      "target": "D_MITHI_OUTFALL",
+      "relation": "flow_downstream",
+      "weight": 0.95,
+      "latency_min": 5,
+      "description": "Pumped discharge pumped out into tidal estuary"
+    },
+    {
+      "source": "D_DHARAVI_CHANNEL",
+      "target": "D_MITHI_OUTFALL",
+      "relation": "flow_downstream",
+      "weight": 0.88,
+      "latency_min": 12,
+      "description": "Trunk canal discharges into lower Mithi reach"
+    },
+    {
+      "source": "D_CHAMBUR_BASIN",
+      "target": "D_BKC_PUMP",
+      "relation": "flow_downstream",
+      "weight": 0.7,
+      "latency_min": 20,
+      "description": "Overflow relief canal diverted toward BKC lift"
+    },
+    {
+      "source": "E_BKC_SUBSTATION",
+      "target": "E_KALINA_GRID",
+      "relation": "supplies_power",
+      "weight": 0.85,
+      "latency_min": 2,
+      "description": "220kV to 33kV distribution feeder line"
+    },
+    {
+      "source": "E_BKC_SUBSTATION",
+      "target": "E_BANDRA_STEPDOWN",
+      "relation": "supplies_power",
+      "weight": 0.9,
+      "latency_min": 2,
+      "description": "High-voltage intertie supply line"
+    },
+    {
+      "source": "E_BKC_SUBSTATION",
+      "target": "E_KURLA_FEEDER",
+      "relation": "supplies_power",
+      "weight": 0.75,
+      "latency_min": 5,
+      "description": "Radial sub-feeder to Kurla industrial rim"
+    },
+    {
+      "source": "E_DHARAVI_FEEDER",
+      "target": "E_BANDRA_STEPDOWN",
+      "relation": "supplies_power",
+      "weight": 0.65,
+      "latency_min": 8,
+      "description": "Secondary grid loop tie-breaker line"
+    },
+    {
+      "source": "R_WEH_JUNCTION",
+      "target": "R_MITHI_BRIDGE",
+      "relation": "physical_road",
+      "weight": 0.9,
+      "latency_min": 1,
+      "description": "Arterial connection from Kalanagar onto causeway"
+    },
+    {
+      "source": "R_MITHI_BRIDGE",
+      "target": "R_BKC_CONNECTOR",
+      "relation": "physical_road",
+      "weight": 0.88,
+      "latency_min": 2,
+      "description": "Causeway transitions onto BKC connector road"
+    },
+    {
+      "source": "R_BKC_CONNECTOR",
+      "target": "R_CST_ROAD",
+      "relation": "physical_road",
+      "weight": 0.92,
+      "latency_min": 2,
+      "description": "Express traffic merges into hospital corridor"
+    },
+    {
+      "source": "R_CST_ROAD",
+      "target": "R_SCLR_INTERCHANGE",
+      "relation": "physical_road",
+      "weight": 0.85,
+      "latency_min": 3,
+      "description": "Feeds SCLR double-decker flyover approach"
+    },
+    {
+      "source": "R_SCLR_INTERCHANGE",
+      "target": "R_LBS_MARG",
+      "relation": "physical_road",
+      "weight": 0.82,
+      "latency_min": 3,
+      "description": "Eastbound ramp drops directly onto LBS underpass"
+    },
+    {
+      "source": "R_WEH_JUNCTION",
+      "target": "R_KALINA_MILITARY_RD",
+      "relation": "physical_road",
+      "weight": 0.75,
+      "latency_min": 4,
+      "description": "Northbound bypass toward airport boundary"
+    },
+    {
+      "source": "E_BKC_SUBSTATION",
+      "target": "D_BKC_PUMP",
+      "relation": "supplies_power",
+      "weight": 0.96,
+      "latency_min": 5,
+      "description": "CRITICAL: 5 heavy stormwater pumps rely on 3.8MW feeder from BKC 220kV substation."
+    },
+    {
+      "source": "E_BANDRA_STEPDOWN",
+      "target": "D_MITHI_OUTFALL",
+      "relation": "supplies_power",
+      "weight": 0.7,
+      "latency_min": 8,
+      "description": "Powers automated tidal sluice gate hydraulic winches."
+    },
+    {
+      "source": "D_MITHI_OUTFALL",
+      "target": "R_MITHI_BRIDGE",
+      "relation": "drains_surface_water",
+      "weight": 0.94,
+      "latency_min": 10,
+      "description": "When Mithi backflow occurs, causeway road is inundated under 0.8m of water."
+    },
+    {
+      "source": "D_BKC_PUMP",
+      "target": "R_BKC_CONNECTOR",
+      "relation": "drains_surface_water",
+      "weight": 0.92,
+      "latency_min": 12,
+      "description": "Pump slowdown causes rapid pooling at low ramp basin of BKC Connector."
+    },
+    {
+      "source": "D_KALINA_DRAIN",
+      "target": "R_CST_ROAD",
+      "relation": "drains_surface_water",
+      "weight": 0.89,
+      "latency_min": 15,
+      "description": "Kalina canal breach cascades directly across CST Road hospital access corridor."
+    },
+    {
+      "source": "D_CHAMBUR_BASIN",
+      "target": "R_LBS_MARG",
+      "relation": "drains_surface_water",
+      "weight": 0.95,
+      "latency_min": 8,
+      "description": "Chunabhatti sump silt overflow immediately paralyzes the sunken LBS Underpass."
+    },
+    {
+      "source": "D_VAKOLA_NULLAH",
+      "target": "R_WEH_JUNCTION",
+      "relation": "drains_surface_water",
+      "weight": 0.87,
+      "latency_min": 15,
+      "description": "Vakola trash clog forces overflow across the Kalanagar highway bottleneck."
+    },
+    {
+      "source": "D_KALINA_DRAIN",
+      "target": "E_KALINA_GRID",
+      "relation": "drains_surface_water",
+      "weight": 0.86,
+      "latency_min": 18,
+      "description": "Kalina basin spillover inundates basement circuit breakers of 33kV Kalina Substation."
+    },
+    {
+      "source": "D_MITHI_OUTFALL",
+      "target": "E_BKC_SUBSTATION",
+      "relation": "drains_surface_water",
+      "weight": 0.82,
+      "latency_min": 25,
+      "description": "Catastrophic Mithi tidal surge threatens perimeter switchyard of 220kV BKC station."
+    },
+    {
+      "source": "E_BANDRA_STEPDOWN",
+      "target": "R_WEH_JUNCTION",
+      "relation": "supplies_power",
+      "weight": 0.8,
+      "latency_min": 2,
+      "description": "Powers smart traffic signal controllers & CCTV at Kalanagar 8-way intersection."
+    },
+    {
+      "source": "E_KALINA_GRID",
+      "target": "R_SCLR_INTERCHANGE",
+      "relation": "supplies_power",
+      "weight": 0.72,
+      "latency_min": 3,
+      "description": "Powers illuminated ramp markers and flyover drainage sump pumps."
+    },
+    {
+      "source": "E_BKC_SUBSTATION",
+      "target": "H_ASIAN_HEART",
+      "relation": "supplies_power",
+      "weight": 0.98,
+      "latency_min": 1,
+      "description": "Primary 11kV commercial power feeder to Asian Heart Institute ICU & Cath Labs."
+    },
+    {
+      "source": "E_BANDRA_STEPDOWN",
+      "target": "EM_AMBULANCE_HUB",
+      "relation": "supplies_power",
+      "weight": 0.88,
+      "latency_min": 2,
+      "description": "Supplies 108 Emergency Radio Dispatch and vehicle battery recharge bays."
+    },
+    {
+      "source": "E_KALINA_GRID",
+      "target": "H_VN_DESAI",
+      "relation": "supplies_power",
+      "weight": 0.92,
+      "latency_min": 2,
+      "description": "Primary power feed to VN Desai Municipal Hospital trauma wards."
+    },
+    {
+      "source": "R_CST_ROAD",
+      "target": "H_ASIAN_HEART",
+      "relation": "emergency_access",
+      "weight": 0.97,
+      "latency_min": 3,
+      "description": "LIFELINE: Only dedicated dual-carriageway access route for ambulances to Asian Heart."
+    },
+    {
+      "source": "R_WEH_JUNCTION",
+      "target": "EM_AMBULANCE_HUB",
+      "relation": "emergency_access",
+      "weight": 0.95,
+      "latency_min": 2,
+      "description": "Ambulance fleet cannot exit base onto Western suburbs if Kalanagar junction is choked."
+    },
+    {
+      "source": "R_MITHI_BRIDGE",
+      "target": "EM_BKC_FIRE",
+      "relation": "emergency_access",
+      "weight": 0.91,
+      "latency_min": 5,
+      "description": "BKC Fire tenders blocked from reaching Dharavi and Bandra West during causeway flood."
+    },
+    {
+      "source": "R_BKC_CONNECTOR",
+      "target": "H_ASIAN_HEART",
+      "relation": "emergency_access",
+      "weight": 0.85,
+      "latency_min": 4,
+      "description": "Express patient transfer route from Eastern suburbs into Asian Heart Institute."
+    },
+    {
+      "source": "R_KALINA_MILITARY_RD",
+      "target": "H_VN_DESAI",
+      "relation": "emergency_access",
+      "weight": 0.84,
+      "latency_min": 5,
+      "description": "Primary ambulance route reaching VN Desai municipal trauma center from East."
+    }
+  ],
+  "metadata": {
+    "city": "Mumbai Metropolitan Region (BKC Basin)",
+    "geo_center": {
+      "lat": 19.062,
+      "lng": 72.858
+    },
+    "total_nodes": 23,
+    "total_edges": 34,
+    "layers": [
+      "drainage",
+      "power",
+      "transport",
+      "emergency"
+    ],
+    "version": "2.4.0-resilience-twin"
+  }
+}

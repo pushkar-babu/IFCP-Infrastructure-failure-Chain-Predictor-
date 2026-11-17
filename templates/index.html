@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFCP | Infrastructure Failure Chain Predictor</title>
+
+  <!-- Leaflet CSS & JS (CDN with fallback) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-nav">
+    <div class="brand-badge">
+      <div class="pulsing-dot" id="system-status-indicator"></div>
+      <div>
+        <div style="font-weight: 800; font-size: 16px; letter-spacing: 0.5px; color: #f8fafc;">
+          IFCP <span style="font-weight: 400; color: #38bdf8; font-size: 13px;">| Infrastructure Failure Chain
+            Predictor</span>
+        </div>
+        <div style="font-size: 11px; color: #94a3b8;" id="city-subtitle">
+          Smart City Resilience Digital Twin • Multi-Basin Platform
+        </div>
+      </div>
+    </div>
+
+    <!-- City Selector Dropdown -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Basin:</span>
+      <select id="city-selector"
+        style="background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; outline: none;">
+        {% for c in cities %}
+        <option value="{{ c.id }}" {% if c.id==current_city %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button class="btn-secondary" id="btn-download-pdf">
+        📄 Download Official PDF SITREP
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Three-Column Workspace -->
+  <main class="main-container">
+
+    <!-- LEFT SIDEBAR: Simulation Controls & Stress Forcing -->
+    <aside class="control-sidebar glass-panel">
+      <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px;">
+        1. Stress Scenario Presets
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <button class="btn-secondary scenario-preset-btn" data-rain="35" data-silt="20" data-tide="2.5">
+          Moderate (35mm)
+        </button>
+        <button class="btn-secondary scenario-preset-btn" data-rain="85" data-silt="35" data-tide="3.2">
+          Monsoon (85mm)
+        </button>
+        <button class="btn-secondary scenario-preset-btn" data-rain="130" data-silt="50" data-tide="3.8"
+          style="border-color: #f59e0b; color: #fbbf24;">
+          Cloudburst (130mm)
+        </button>
+        <button class="btn-secondary scenario-preset-btn" data-rain="180" data-silt="70" data-tide="4.4"
+          style="border-color: #ef4444; color: #f87171;">
+          Deluge (180mm)
+        </button>
+      </div>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 10px;">
+        <div
+          style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 10px;">
+          2. Environmental Forcing
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Rainfall Intensity</span>
+            <b id="val-rainfall" style="color: #38bdf8;">85 mm/h</b>
+          </div>
+          <input type="range" id="slider-rainfall" class="slider-input" min="0" max="220" value="85" step="5">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Power Grid Load</span>
+            <b id="val-grid" style="color: #f59e0b;">100%</b>
+          </div>
+          <input type="range" id="slider-grid" class="slider-input" min="50" max="150" value="100" step="5">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Drainage Siltation Deficit</span>
+            <b id="val-silt" style="color: #a855f7;">35%</b>
+          </div>
+          <input type="range" id="slider-silt" class="slider-input" min="5" max="80" value="35" step="5">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>High Tide Backwater</span>
+            <b id="val-tide" style="color: #06b6d4;">3.4 m</b>
+          </div>
+          <input type="range" id="slider-tide" class="slider-input" min="1.0" max="4.8" value="3.4" step="0.1">
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 10px;">
+        <div
+          style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 8px;">
+          3. Preventive Interventions (Live Countermeasures)
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label class="intervention-item">
+            <input type="checkbox" class="intervention-checkbox" value="ACTION_MOBILE_PUMPS" style="margin-top: 2px;">
+            <div style="font-size: 12px;">
+              <b style="color: #38bdf8;">Mobile Dewatering Pumps</b>
+              <div style="font-size: 10px; color: #94a3b8;">4x heavy diesel units at BKC & Kalina sumps</div>
+            </div>
+          </label>
+
+          <label class="intervention-item">
+            <input type="checkbox" class="intervention-checkbox" value="ACTION_GRID_REROUTE" style="margin-top: 2px;">
+            <div style="font-size: 12px;">
+              <b style="color: #f59e0b;">Grid Load Shedding</b>
+              <div style="font-size: 10px; color: #94a3b8;">SCADA reroute away from vulnerable 220kV yard</div>
+            </div>
+          </label>
+
+          <label class="intervention-item">
+            <input type="checkbox" class="intervention-checkbox" value="ACTION_GREEN_CORRIDOR" style="margin-top: 2px;">
+            <div style="font-size: 12px;">
+              <b style="color: #ef4444;">Ambulance Green Corridor</b>
+              <div style="font-size: 10px; color: #94a3b8;">Police traffic diversion along elevated flyovers</div>
+            </div>
+          </label>
+
+          <label class="intervention-item">
+            <input type="checkbox" class="intervention-checkbox" value="ACTION_FLOOD_BARRIERS" style="margin-top: 2px;">
+            <div style="font-size: 12px;">
+              <b style="color: #10b981;">Modular Flood Barriers</b>
+              <div style="font-size: 10px; color: #94a3b8;">Deploy 1.2m water walls at Kalina Substation</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER VIEWPORT: Maps, Graphs, Metrics, and Cascade Timeline -->
+    <section class="center-viewport">
+
+      <!-- Top Metrics Dashboard -->
+      <div class="metric-grid glass-panel" style="grid-template-columns: repeat(4, 1fr); padding: 10px;">
+        <div class="metric-card">
+          <div class="metric-label">System Resilience Index</div>
+          <div class="metric-val" id="metric-sri" style="color: #34d399;">84.5%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Critical Failures</div>
+          <div class="metric-val" id="metric-failures" style="color: #f87171;">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Degraded Assets</div>
+          <div class="metric-val" id="metric-degraded" style="color: #fbbf24;">1</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Citizens Impacted</div>
+          <div class="metric-val" id="metric-population" style="color: #38bdf8;">0k</div>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="map">🗺️ GIS Digital Twin Map</button>
+        <button class="tab-btn" data-tab="graph">🕸️ Interdependency Graph</button>
+        <button class="tab-btn" data-tab="interventions">🛡️ Prevention & Recovery Planner</button>
+        <button class="tab-btn" data-tab="metrics">📊 AI Model & Calibration Benchmarks</button>
+      </div>
+
+      <!-- Tab 1: GIS Map View -->
+      <div class="view-content tab-pane" id="pane-map" style="display: block;">
+        <div id="map"></div>
+        <!-- Floating Layer Toggles on Map -->
+        <div
+          style="position: absolute; top: 12px; right: 12px; z-index: 1000; background: rgba(15,23,42,0.9); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; gap: 8px; font-size: 11px;">
+          <button class="btn-secondary layer-toggle-btn" data-layer="drainage" style="color: #06b6d4;">💧
+            Drainage</button>
+          <button class="btn-secondary layer-toggle-btn" data-layer="power" style="color: #f59e0b;">⚡ Power</button>
+          <button class="btn-secondary layer-toggle-btn" data-layer="transport" style="color: #a855f7;">🛣️
+            Transport</button>
+          <button class="btn-secondary layer-toggle-btn" data-layer="emergency" style="color: #ef4444;">🏥
+            Emergency</button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Dependency Network Graph View -->
+      <div class="view-content tab-pane" id="pane-graph" style="display: none;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <!-- Tab 3: Prevention & Recovery Planner -->
+      <div class="view-content tab-pane" id="pane-interventions"
+        style="display: none; padding: 16px; overflow-y: auto; background: var(--bg-card);">
+        <div id="ai-rec-banner" style="margin-bottom: 16px;"></div>
+        <h4 style="font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">
+          Countermeasure Trade-off Matrix (Evaluated Across 4 Urban Layers)
+        </h4>
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 1px solid #475569; font-size: 11px; text-transform: uppercase; color: #94a3b8;">
+              <th style="padding: 8px;">Action / Cost / Lead</th>
+              <th style="padding: 8px;">Layer</th>
+              <th style="padding: 8px;">Δ Resilience</th>
+              <th style="padding: 8px;">Failures Averted</th>
+              <th style="padding: 8px;">Citizens Protected</th>
+              <th style="padding: 8px;">Hospitals Shielded</th>
+            </tr>
+          </thead>
+          <tbody id="intervention-matrix-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Tab 4: AI Model & Calibration Benchmarks -->
+      <div class="view-content tab-pane" id="pane-metrics"
+        style="display: none; padding: 16px; overflow-y: auto; background: var(--bg-card);">
+        <div id="metrics-container"></div>
+      </div>
+
+      <!-- Timeline Scrubber & Cascade Controller -->
+      <div class="timeline-bar">
+        <button class="btn-primary" id="btn-play" style="min-width: 130px;">
+          ▶ Play Cascade
+        </button>
+        <button class="btn-secondary" id="btn-step">Step +10m</button>
+        <button class="btn-secondary" id="btn-reset">Reset</button>
+
+        <div style="flex: 1; display: flex; align-items: center; gap: 10px; margin: 0 10px;">
+          <input type="range" id="timeline-slider" min="0" max="5" value="0" step="1"
+            style="flex: 1; accent-color: #38bdf8; cursor: pointer;">
+        </div>
+
+        <div
+          style="background: rgba(2,132,199,0.2); border: 1px solid #0284c7; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; color: #38bdf8;"
+          id="current-time-label">
+          T + 00 min
+        </div>
+      </div>
+
+      <!-- Real-Time Cascade Events Feed -->
+      <div
+        style="height: 110px; overflow-y: auto; background: rgba(15,23,42,0.9); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;"
+        id="events-feed">
+        <div style="color: #64748b; font-size: 12px; padding: 4px;">Simulation nominal. No systemic failure events
+          triggered.</div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT SIDEBAR: Explainable AI (XAI) & Causal Attribution -->
+    <aside class="analytics-sidebar glass-panel">
+      <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px;">
+        AI Explanation Centre (XAI)
+      </div>
+      <div id="xai-container">
+        <div style="color: #64748b; font-size: 12px; padding: 12px;">Loading XAI diagnostic report...</div>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- JavaScript Modules -->
+  <script src="/static/js/map_module.js"></script>
+  <script src="/static/js/graph_module.js"></script>
+  <script src="/static/js/simulator.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+
+</html>
