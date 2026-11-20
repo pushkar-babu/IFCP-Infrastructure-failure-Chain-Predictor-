@@ -131,6 +131,7 @@ def server_error_handler(e):
 
 # Web Dashboard Route
 @app.route("/")
+@app.route("/api/index")
 def index():
     """Renders the primary Digital Twin Command Center dashboard."""
     cities = get_available_cities()
