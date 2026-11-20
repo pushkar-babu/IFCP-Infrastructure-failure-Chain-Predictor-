@@ -49,6 +49,8 @@ AVAILABLE_INTERVENTIONS = [
     }
 ]
 
+ALLOWED_ACTION_IDS = {action["id"] for action in AVAILABLE_INTERVENTIONS}
+
 def evaluate_interventions(
     rainfall_mm_hr: float = 110.0,
     grid_load_pct: float = 105.0,
@@ -61,7 +63,8 @@ def evaluate_interventions(
     Compares baseline scenario (zero actions) against individual actions and combined portfolio.
     """
     sim = CascadeSimulator(city_id=city_id)
-    selected_actions = selected_actions or []
+    # Sanitize and filter actions against allowed set
+    selected_actions = [a for a in (selected_actions or []) if a in ALLOWED_ACTION_IDS]
 
     # 1. Baseline Run (No Interventions)
     baseline_run = sim.run_simulation(

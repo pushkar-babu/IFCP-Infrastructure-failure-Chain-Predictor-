@@ -126,11 +126,19 @@ class DependencyGraphExplorer {
   }
 
   startAnimationLoop() {
+    if (this.animFrameId) return;
     const render = () => {
       this.draw();
       this.animFrameId = requestAnimationFrame(render);
     };
-    render();
+    this.animFrameId = requestAnimationFrame(render);
+  }
+
+  stopAnimationLoop() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
   }
 
   draw() {

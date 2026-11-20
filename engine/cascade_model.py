@@ -40,7 +40,13 @@ class CascadeSimulator:
         Executes a 60-minute multi-step cascade simulation.
         Time steps: [0, 10, 20, 30, 45, 60] minutes.
         """
-        interventions = interventions or []
+        # Defensive parameter sanitization & boundary enforcement
+        rainfall_mm_hr = max(0.0, min(500.0, float(rainfall_mm_hr)))
+        grid_load_pct = max(10.0, min(300.0, float(grid_load_pct)))
+        drainage_siltation_pct = max(0.0, min(100.0, float(drainage_siltation_pct)))
+        high_tide_m = max(0.0, min(15.0, float(high_tide_m)))
+        action_set = set(interventions or [])
+
         time_steps = [0, 10, 20, 30, 45, 60]
         
         # Initial node states
@@ -57,11 +63,11 @@ class CascadeSimulator:
                 "active_interventions": []
             }
 
-        # Check applied active interventions
-        applied_pump_reinforce = "ACTION_MOBILE_PUMPS" in interventions
-        applied_grid_shed = "ACTION_GRID_REROUTE" in interventions
-        applied_traffic_diversion = "ACTION_GREEN_CORRIDOR" in interventions
-        applied_flood_barriers = "ACTION_FLOOD_BARRIERS" in interventions
+        # Check applied active interventions (O(1) set lookup)
+        applied_pump_reinforce = "ACTION_MOBILE_PUMPS" in action_set
+        applied_grid_shed = "ACTION_GRID_REROUTE" in action_set
+        applied_traffic_diversion = "ACTION_GREEN_CORRIDOR" in action_set
+        applied_flood_barriers = "ACTION_FLOOD_BARRIERS" in action_set
 
         timeline_snapshots: List[Dict[str, Any]] = []
         cascade_events: List[Dict[str, Any]] = []

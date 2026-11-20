@@ -109,5 +109,54 @@ class TestIFCPPlatform(unittest.TestCase):
         self.assertEqual(r5.status_code, 200)
         self.assertEqual(r5.content_type, "application/pdf")
 
+    def test_security_headers(self):
+        """Verify strict OWASP security response headers are enforced."""
+        res = self.app.get("/")
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.headers.get("X-Content-Type-Options"), "nosniff")
+        self.assertEqual(res.headers.get("X-Frame-Options"), "DENY")
+        self.assertIn("default-src", res.headers.get("Content-Security-Policy", ""))
+        self.assertEqual(res.headers.get("Referrer-Policy"), "strict-origin-when-cross-origin")
+
+    def test_input_validation_and_sanitization(self):
+        """Verify negative / extreme values are securely clamped without exceptions."""
+        # Negative rainfall should clamp to 0
+        r_neg = self.app.post("/api/simulate", json={"rainfall_mm_hr": -50, "city": "mumbai"})
+        self.assertEqual(r_neg.status_code, 200)
+        
+        # Invalid city defaults safely to mumbai without crashing or directory traversal
+        r_city = self.app.post("/api/simulate", json={"city": "../../etc/passwd", "rainfall_mm_hr": 50})
+        self.assertEqual(r_city.status_code, 200)
+        data = json.loads(r_city.data)
+        self.assertIn("timeline", data)
+
+        # Malformed node_id in explain endpoint returns 400
+        r_invalid_node = self.app.post("/api/explain/NODE@INVALID!NAME", json={})
+        self.assertEqual(r_invalid_node.status_code, 400)
+
+    def test_accessibility_compliance_elements(self):
+        """Verify WCAG 2.1 AA/AAA compliance markers in rendered template."""
+        res = self.app.get("/")
+        html = res.data.decode("utf-8")
+        self.assertIn('lang="en"', html)
+        self.assertIn('class="skip-link"', html)
+        self.assertIn('role="banner"', html)
+        self.assertIn('<h1', html)
+        self.assertIn('role="main"', html)
+        self.assertIn('role="tablist"', html)
+        self.assertIn('role="switch"', html)
+        self.assertIn('role="log"', html)
+        self.assertIn('role="img"', html)
+        self.assertIn('<caption', html)
+
+    def test_performance_latency(self):
+        """Verify simulation execution latency benchmark (< 50ms)."""
+        import time
+        t0 = time.perf_counter()
+        sim = CascadeSimulator()
+        sim.run_simulation(rainfall_mm_hr=120.0)
+        duration_ms = (time.perf_counter() - t0) * 1000
+        self.assertLess(duration_ms, 50.0, f"Simulation latency {duration_ms:.2f}ms exceeded 50ms budget")
+
 if __name__ == "__main__":
     unittest.main()

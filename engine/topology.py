@@ -7,6 +7,7 @@ Multi-city interdependent infrastructure network supporting:
 """
 
 import json
+from functools import lru_cache
 from dataclasses import dataclass, asdict, field
 from typing import Dict, List, Any, Optional
 
@@ -268,12 +269,18 @@ def _get_delhi_topology() -> Dict[str, Any]:
         }
     }
 
+VALID_CITIES = {"mumbai", "bengaluru", "bangalore", "delhi"}
+
+@lru_cache(maxsize=16)
 def get_urban_topology(city_id: str = "mumbai") -> Dict[str, Any]:
-    """Returns the multi-layer infrastructure graph for the specified city."""
-    city_id = (city_id or "mumbai").lower().strip()
-    if city_id == "bengaluru" or city_id == "bangalore":
+    """Returns the cached multi-layer infrastructure graph for the specified city."""
+    clean_id = (city_id or "mumbai").lower().strip()
+    if clean_id not in VALID_CITIES:
+        clean_id = "mumbai"
+        
+    if clean_id in ("bengaluru", "bangalore"):
         return _get_bengaluru_topology()
-    elif city_id == "delhi":
+    elif clean_id == "delhi":
         return _get_delhi_topology()
     else:
         return _get_mumbai_topology()

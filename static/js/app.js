@@ -68,8 +68,29 @@ function initUI() {
     if (btn) btn.innerText = "▶ Play Cascade";
   });
 
-  document.getElementById("timeline-slider")?.addEventListener("input", (e) => {
-    appState.simController.seek(parseInt(e.target.value));
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  const debouncedRunSimulation = debounce(() => {
+    runSimulation();
+    loadInterventionComparison();
+  }, 180);
+
+  const timelineSlider = document.getElementById("timeline-slider");
+  timelineSlider?.addEventListener("input", (e) => {
+    const val = parseInt(e.target.value);
+    timelineSlider.setAttribute("aria-valuenow", val);
+    timelineSlider.setAttribute("aria-valuetext", `Simulation step ${val}`);
+    appState.simController.seek(val);
   });
 
   // 3. Environmental Sliders
@@ -80,6 +101,9 @@ function initUI() {
       slider.addEventListener("input", (e) => {
         let suffix = param === "rainfall" ? " mm/h" : (param === "tide" ? " m" : "%");
         display.innerText = e.target.value + suffix;
+        slider.setAttribute("aria-valuenow", e.target.value);
+        slider.setAttribute("aria-valuetext", `${e.target.value}${suffix}`);
+        debouncedRunSimulation();
       });
       slider.addEventListener("change", () => {
         runSimulation();
@@ -96,16 +120,34 @@ function initUI() {
       const tide = e.target.dataset.tide;
 
       if (rain) {
-        document.getElementById("slider-rainfall").value = rain;
-        document.getElementById("val-rainfall").innerText = rain + " mm/h";
+        const sl = document.getElementById("slider-rainfall");
+        if (sl) {
+          sl.value = rain;
+          sl.setAttribute("aria-valuenow", rain);
+          sl.setAttribute("aria-valuetext", `${rain} mm/h`);
+        }
+        const valRain = document.getElementById("val-rainfall");
+        if (valRain) valRain.innerText = rain + " mm/h";
       }
       if (silt) {
-        document.getElementById("slider-silt").value = silt;
-        document.getElementById("val-silt").innerText = silt + "%";
+        const sl = document.getElementById("slider-silt");
+        if (sl) {
+          sl.value = silt;
+          sl.setAttribute("aria-valuenow", silt);
+          sl.setAttribute("aria-valuetext", `${silt}%`);
+        }
+        const valSilt = document.getElementById("val-silt");
+        if (valSilt) valSilt.innerText = silt + "%";
       }
       if (tide) {
-        document.getElementById("slider-tide").value = tide;
-        document.getElementById("val-tide").innerText = tide + " m";
+        const sl = document.getElementById("slider-tide");
+        if (sl) {
+          sl.value = tide;
+          sl.setAttribute("aria-valuenow", tide);
+          sl.setAttribute("aria-valuetext", `${tide} m`);
+        }
+        const valTide = document.getElementById("val-tide");
+        if (valTide) valTide.innerText = tide + " m";
       }
       runSimulation();
       loadInterventionComparison();
@@ -128,17 +170,29 @@ function initUI() {
   // 6. Tab Navigation
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
       document.querySelectorAll(".tab-pane").forEach(p => p.style.display = "none");
       
       btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
       const tabId = btn.dataset.tab;
       const pane = document.getElementById(`pane-${tabId}`);
       if (pane) pane.style.display = "block";
 
-      if (tabId === "graph" && appState.graphExplorer) {
-        setTimeout(() => appState.graphExplorer.resize(), 50);
+      if (tabId === "graph") {
+        if (appState.graphExplorer) {
+          appState.graphExplorer.startAnimationLoop();
+          setTimeout(() => appState.graphExplorer.resize(), 50);
+        }
+      } else {
+        if (appState.graphExplorer) {
+          appState.graphExplorer.stopAnimationLoop();
+        }
       }
+
       if (tabId === "map" && appState.mapManager && appState.mapManager.map) {
         setTimeout(() => appState.mapManager.map.invalidateSize(), 50);
       }
@@ -148,9 +202,10 @@ function initUI() {
   // 7. Layer Filter Toggles
   document.querySelectorAll(".layer-toggle-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
-      const layer = e.target.dataset.layer;
+      const layer = btn.dataset.layer || e.target.dataset.layer;
       const isActive = appState.mapManager.toggleLayer(layer);
       btn.style.opacity = isActive ? "1" : "0.4";
+      btn.setAttribute("aria-checked", isActive ? "true" : "false");
     });
   });
 
@@ -230,7 +285,11 @@ async function runSimulation() {
 
 function updateTimelineUI(stepIdx, snapshot, fullSim) {
   const slider = document.getElementById("timeline-slider");
-  if (slider) slider.value = stepIdx;
+  if (slider) {
+    slider.value = stepIdx;
+    slider.setAttribute("aria-valuenow", stepIdx);
+    slider.setAttribute("aria-valuetext", `Step ${stepIdx}, T + ${String(snapshot.time_min).padStart(2, '0')} minutes`);
+  }
 
   const timeLabel = document.getElementById("current-time-label");
   if (timeLabel) timeLabel.innerText = `T + ${String(snapshot.time_min).padStart(2, '0')} min`;
